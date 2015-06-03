@@ -1,0 +1,26 @@
+---
+base:
+  build: .
+  volumes:
+    - ".:/app"
+    - "~/.figged/cache/ubuntu-ruby2.2:/shared/cache/2.2"
+  environment:
+    - BUNDLE_PATH=/shared/cache/2.2/gems
+    - GEM_PATH=/usr/local/lib/ruby/gems/2.2.0:/shared/cache/2.2/gems
+
+app:
+  extends:
+    file: docker-compose.yml
+    service: base
+
+test:
+  extends:
+    file: docker-compose.yml
+    service: base
+  command: bundle exec rspec spec
+
+bundle:
+  extends:
+    file: docker-compose.yml
+    service: base
+  command: bundle install --jobs=8
